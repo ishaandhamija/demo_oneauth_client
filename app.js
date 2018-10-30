@@ -11,7 +11,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 
 app.set('view engine', 'hbs')
 
-app.get('/', (req, res) => {
+app.get('/home', (req, res) => {
 	res.send('working')
 })
 
@@ -26,19 +26,19 @@ passport.use(new OneauthStrategy({
     include : ["facebook","twitter","github","lms"]
   },
   function(accessToken, refreshToken, profile, cb) {
-  	console.log ('here')
-    User.findOrCreate({ oneauthId: profile.id }, function (err, user) {
-      return cb(err, user);
-    });
+  	console.log ('accessToken : ' + accessToken)
+  	console.log ('refreshToken : ' + refreshToken)
+	console.log ('profile : ' + JSON.stringify(profile))
+	console.log ('cb : ' + cb)
+
+    // User.findOrCreate({ oneauthId: profile.id }, function (err, user) {
+    //  	return cb(err, user);
+    // });
   }
 ));
 
-// app.get('/login', (req, res, next) => {
-//     return res.render('login', {url: 'http://account.codingblocks.com/oauth/authorize?response_type=code&client_id=9393567132&redirect_uri=http://127.0.0.1:3030/'})
-// })
-
 app.get('/login', passport.authenticate('oneauth'))
-app.get('/login/callback', passport.authenticate('oneauth', { successRedirect: '/', failureRedirect: '/' }));
+app.get('/', passport.authenticate('oneauth', { successRedirect: '/home', failureRedirect: '/fail' }));
 
 app.listen(3030, () => {
 	console.log ('Listening to port 3030...')
