@@ -4,6 +4,7 @@ const passport = require ('passport');
 const OneauthStrategy = require ('passport-oneauth').Strategy;
 const app = express ();
 
+const User = require ('./models/user')
 const config = require ('./config');
 
 app.use(bodyParser.json());
@@ -30,6 +31,15 @@ passport.use(new OneauthStrategy({
   	console.log ('refreshToken : ' + refreshToken)
 	console.log ('profile : ' + JSON.stringify(profile))
 	console.log ('cb : ' + cb)
+	console.log ('User : ' + User)
+
+	return User.create( {id: profile.id, role: profile.role} )
+	.then(user => {
+		return cb (null, user)
+	})
+	.catch(err => {
+		console.err (err)
+	})
 
     // User.findOrCreate({ oneauthId: profile.id }, function (err, user) {
     //  	return cb(err, user);
@@ -38,7 +48,11 @@ passport.use(new OneauthStrategy({
 ));
 
 app.get('/login', passport.authenticate('oneauth'))
-app.get('/', passport.authenticate('oneauth', { successRedirect: '/home', failureRedirect: '/fail' }));
+app.get('/', passport.authenticate('oneauth', { failureRedirect: '/fail' }), 
+	function (req, res) {
+		console.log('req: ' + req)
+		res.send('/home')
+	});
 
 app.listen(3030, () => {
 	console.log ('Listening to port 3030...')

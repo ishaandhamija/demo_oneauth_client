@@ -4,20 +4,20 @@
     "password": "demo_oneauth",
     "database": "demo_oneauth",
     "host": "127.0.0.1",
-    "dialect": "psql"
+    "dialect": "postgres"
   },
   "test": {
     "username": "demo_oneauth",
     "password": "demo_oneauth",
     "database": "demo_oneauth",
     "host": "127.0.0.1",
-    "dialect": "psql"
+    "dialect": "postgres"
   },
   "production": {
     "username": "demo_oneauth",
     "password": "demo_oneauth",
     "database": "demo_oneauth",
     "host": "127.0.0.1",
-    "dialect": "psql"
+    "dialect": "postgres"
   }
 }
